@@ -62,7 +62,7 @@ if __name__ == '__main__':
     cursor = ibm_db_dbi.Connection(conn).cursor()
 
     # Load the data
-    df = pd.read_csv('./data/Danh_Sach_Sinh_Vien.csv')
+    df = pd.read_csv('./data/vietnamese_students.csv')
 
     # Create and insert the table
     create_and_insert_table(cursor, df, 'STUDENTS')

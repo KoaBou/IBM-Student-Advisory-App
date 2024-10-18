@@ -69,20 +69,28 @@ def delete():
         flash(str(e))
         return redirect(url_for('index'))
 
-@app.route('/query', methods=['POST'])
-def query():
-    try:
-        query = request.form['query']
-        stmt = ibm_db.exec_immediate(conn, query)
-        rows = []
-        row = ibm_db.fetch_assoc(stmt)
-        while row:
-            rows.append(row)
-            row = ibm_db.fetch_assoc(stmt)
-        return render_template('index.html', rows=rows)
-    except Exception as e:
-        flash(str(e))
-        return render_template('index.html', rows=[])
+@app.route('/query_data', methods=['GET'])
+def query_data():
+    query = request.args.get('query')
+    id = request.args.get('id')
+    
+    if query:
+        sql = f"{query}"
+    elif id:
+        sql = f"SELECT * FROM STUDENTS WHERE ID = '{id}'"
+    else:
+        sql = "SELECT * from STUDENTS LIMIT 10"
+    
+    stmt = ibm_db.exec_immediate(conn, sql)
+    rows = []
+    result = ibm_db.fetch_assoc(stmt)
+    while result:
+        rows.append(result)
+        result = ibm_db.fetch_assoc(stmt)
+    return render_template('index.html', rows=rows)  # Ensure only 10 rows are passed to the template
+
+    
+
     
 @app.route('/insert', methods=['POST'])
 def insert():

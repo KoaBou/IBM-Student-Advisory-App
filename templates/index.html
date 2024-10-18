@@ -57,7 +57,16 @@
         </form>
     </div>
 
-    <h2>Data</h2>
+    <h2>STUDENTS</h2>
+    
+    <form action="{{ url_for('query_data') }}" method="GET">
+        <label for="query">Query:</label>
+        <input type="text" id="query" name="query" placeholder="Enter your query">
+        <label for="id">ID:</label>
+        <input type="text" id="id" name="id" placeholder="Enter ID">
+        <input type="submit" value="Search">
+    </form>
+
     <table>
         <thead>
             <tr>
@@ -78,6 +87,8 @@
             {% endfor %}
         </tbody>
     </table>
+
+
     <script>
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
@@ -96,5 +107,17 @@
         // Open the Insert tab by default
         document.getElementsByClassName('tablinks')[0].click();
     </script>
+
+    <script type="text/javascript">
+        (function(d, m){
+            var kommunicateSettings =
+                {"appId":"3f54a91a3eb798347e4b3537001144c74","popupWidget":true,"automaticChatOpenOnNavigation":true};
+            var s = document.createElement("script"); s.type = "text/javascript"; s.async = true;
+            s.src = "https://widget.kommunicate.io/v2/kommunicate.app";
+            var h = document.getElementsByTagName("head")[0]; h.appendChild(s);
+            window.kommunicate = m; m._globals = kommunicateSettings;
+        })(document, window.kommunicate || {});
+    </script>
+
 </body>
 </html>
