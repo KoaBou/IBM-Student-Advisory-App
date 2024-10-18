@@ -3,67 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Database Table</title>
+    <title>Flask App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <h1>Database Table</h1>
-    <table border="1">
-        <thead>
-        <tr>
-            {% if rows %}
-                {% for key in rows[0].keys() %}
-                    <th>{{ key }}</th>
-                {% endfor %}
-            {% endif %}
-        </tr>
-        </thead>
-        <tbody>
-        {% for row in rows %}
-        <tr>
-            {% for value in row.values() %}
-                <td>{{ value }}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <h1>Student Management</h1>
+    
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'Insert')">Insert</button>
+        <button class="tablinks" onclick="openTab(event, 'Update')">Update</button>
+        <button class="tablinks" onclick="openTab(event, 'Remove')">Remove</button>
+    </div>
 
-    <h2>Update Record</h2>
-    <form action="/update" method="post">
-        <label for="id">ID:</label>
-        <input type="text" id="id" name="id">
-        <label for="column">Column:</label>
-        <select id="column" name="column">
+    <div id="Insert" class="tabcontent">
+        <h2>Insert Data</h2>
+        <form action="{{ url_for('insert') }}" method="POST">
             {% if rows %}
-                {% for key in rows[0].keys() %}
-                    <option value="{{ key }}">{{ key }}</option>
-                {% endfor %}
-            {% endif %}
-        </select>
-        <label for="new_value">New Value:</label>
-        <input type="text" id="new_value" name="new_value">
-        <button type="submit">Update</button>
-    </form>
-
-    <h2>Insert New Record</h2>
-    <form action="/insert" method="post">
-        {% if rows %}
             {% for key in rows[0].keys() %}
                 <label for="{{ key }}">{{ key }}:</label>
                 <input type="text" id="{{ key }}" name="{{ key }}">
                 <br>
             {% endfor %}
-        {% endif %}
-        <button type="submit">Insert</button>
-    </form>
+            {% endif %}
+            <input type="submit" value="Submit">
+        </form>
+    </div>
 
-    <h2>Remove Record</h2>
-    <form action="/delete" method="post">
-        <label for="id">ID:</label>
-        <input type="text" id="id" name="id">
-        <button type="submit">Remove</button>
-    </form>
+    <div id="Update" class="tabcontent">
+        <h2>Update Data</h2>
+        <form action="{{ url_for('update') }}" method="POST">
+            <label for="id">ID:</label>
+            <input type="text" id="id" name="id">
+            <label for="column">Column:</label>
+            <select id="column" name="column">
+                {% if rows %}
+                    {% for key in rows[0].keys() %}
+                        <option value="{{ key }}">{{ key }}</option>
+                    {% endfor %}
+                {% endif %}
+            </select>
+            <label for="new_value">New Value:</label>
+            <input type="text" id="new_value" name="new_value">
+            <input type="submit" value="Update">
+        </form>
+    </div>
 
+    <div id="Remove" class="tabcontent">
+        <h2>Remove Data</h2>
+        <form action="{{ url_for('delete') }}" method="POST">
+            <label for="id">ID:</label>
+            <input type="text" id="id" name="id" required><br><br>
+            <input type="submit" value="Remove">
+        </form>
+    </div>
 
+    <h2>Data</h2>
+    <table>
+        <thead>
+            <tr>
+                {% if rows and rows|length > 0 %}
+                    {% for key in rows[0].keys() %}
+                        <th>{{ key }}</th>
+                    {% endfor %}
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                {% for value in row.values() %}
+                    <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Open the Insert tab by default
+        document.getElementsByClassName('tablinks')[0].click();
+    </script>
 </body>
 </html>
