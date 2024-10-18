@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Table</title>
+</head>
+<body>
+    <h1>Database Table</h1>
+    <table border="1">
+        <thead>
+        <tr>
+            {% if rows %}
+                {% for key in rows[0].keys() %}
+                    <th>{{ key }}</th>
+                {% endfor %}
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in rows %}
+        <tr>
+            {% for value in row.values() %}
+                <td>{{ value }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Update Record</h2>
+    <form action="/update" method="post">
+        <label for="id">ID:</label>
+        <input type="text" id="id" name="id">
+        <label for="column">Column:</label>
+        <select id="column" name="column">
+            {% if rows %}
+                {% for key in rows[0].keys() %}
+                    <option value="{{ key }}">{{ key }}</option>
+                {% endfor %}
+            {% endif %}
+        </select>
+        <label for="new_value">New Value:</label>
+        <input type="text" id="new_value" name="new_value">
+        <button type="submit">Update</button>
+    </form>
+
+    <h2>Insert New Record</h2>
+    <form action="/insert" method="post">
+        {% if rows %}
+            {% for key in rows[0].keys() %}
+                <label for="{{ key }}">{{ key }}:</label>
+                <input type="text" id="{{ key }}" name="{{ key }}">
+                <br>
+            {% endfor %}
+        {% endif %}
+        <button type="submit">Insert</button>
+    </form>
+
+    <h2>Remove Record</h2>
+    <form action="/delete" method="post">
+        <label for="id">ID:</label>
+        <input type="text" id="id" name="id">
+        <button type="submit">Remove</button>
+    </form>
+
+
+</body>
+</html>
